@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<head>
+    <title>Demo 1</title>
+    <script src="http://libs.baidu.com/jquery/2.0.0/jquery.js"></script>
+    <style>
+        body {
+            filter: invert(1) hue-rotate(270deg);
+        }
+        table {
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            border-spacing: 0;
+            border-collapse: collapse;
+            color:#5a5a5a;
+            table-layout: fixed;
+        }
+        table td,table th{
+            border:1px solid #ccc;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            padding-top:4em;
+            padding-bottom:4em;
+            font-size: 20pt;
+            color:white;
+        }
+        div{
+            color:white;
+            font-size: 20px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div id="root" onclick="zoomout()"></div>
+    <table>
+        <tbody>
+            <tr>
+                <td id="block1" onclick="zoomin(this.id)"> </td>
+                <td id="block2" onclick="zoomin(this.id)"> </td>
+                <td id="block3" onclick="zoomin(this.id)"> </td>
+            </tr>
+            <tr>
+                <td id="block4" onclick="zoomin(this.id)"> </td>
+                <td>Here will be your <br/> real-time transcription</td>
+                <td id="block5" onclick="zoomin(this.id)"> </td>
+            </tr>
+            <tr>
+                <td id="block6" onclick="zoomin(this.id)"> </td>
+                <td id="block7" onclick="zoomin(this.id)"> </td>
+                <td id="block8" onclick="zoomin(this.id)"> </td>
+            </tr>
+        </tbody>
+    </table>
+    <script src="./demo1.js"></script>
+</body>
+</html>
