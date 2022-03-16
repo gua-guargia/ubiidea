@@ -5,119 +5,71 @@
     <style>
         .sub {
             /* padding:3em; */
-            padding: 2em;
             text-align: center;
             /* border: 1px solid black; */
             font-size: 18pt;
             white-space: normal;
+            color: white;
+            width: 250px;
+            height: 150px;
+            text-align: center;
+            justify-content:center;
+            align-items:center;
+            display:-webkit-flex;
         }
         .overflow_container{
             overflow: auto;
             height:600px;
         }
         .root{
-            border: 3px solid black;
-            padding: 2em;
-            font-size: 16pt;
+            border: 0.7px solid black;
             font-size: 24pt;
+            color: white;
+            width: 250px;
+            height: 200px;
+            text-align: center;
+            justify-content:center;
+            align-items:center;
+            display:-webkit-flex;
+        }
+        .sub_content{
+            vertical-align: middle;
+        }
+        .root_content{
+            vertical-align: middle;
         }
         .component{
             display: inline-block;
         }
         body{
+            background-image:url('https://j.gifs.com/JZm2X2.gif'); 
+            background-size: cover;
+            height: 100vh;
+        }
+        #scrolling-box{
             overflow-x: auto;
         }
         #component-container{
             display: flex;
-            white-space: nowrap;
+            /* white-space: nowrap; */
         }
     </style>
 </head>
 <body>
     <!-- background image -->
-    <div id="component-container">
-        <div class="component">
-            <div class="root">root idea 1</div>
-            <div class="overflow_container">
-                    <div class="sub">sub idea 1</div>
-                    <div class="sub">sub idea 2</div>
-                    <div class="sub">sub idea 3</div>
-                    <div class="sub">sub idea 4</div>
-            </div>
-        </div>
-        <div class="component">
-            <div class="root">root idea 2</div>
-            <div class="overflow_container">
-                    <div class="sub">sub idea 1</div>
-                    <div class="sub">sub idea 2</div>
-                    <div class="sub">sub idea 3</div>
-                    <div class="sub">sub idea 4</div>
-                    <div class="sub">sub idea 5</div>
-                    <div class="sub">sub idea 6</div>
-                    <div class="sub">sub idea 7</div>
-            </div>
-        </div>
-        <div class="component">
-            <div class="root">root idea 3</div>
-            <div class="overflow_container">
-                    <div class="sub">sub idea 1</div>
-                    <div class="sub">sub idea 2</div>
-                    <div class="sub">sub idea 3</div>
-                    <div class="sub">sub idea 4</div>
-                    <div class="sub">sub idea 5</div>
-                    <div class="sub">sub idea 6</div>
-                    <div class="sub">sub idea 7</div>
-                    <div class="sub">sub idea 8</div>
-                    <div class="sub">sub idea 9</div>
-                    <div class="sub">sub idea 10</div>
-            </div>
-        </div>
-        <div class="component">
-            <div class="root">root idea 4</div>
-            <div class="overflow_container">
-                    <div class="sub">sub idea 1</div>
-                    <div class="sub">sub idea 2</div>
-                    <div class="sub">sub idea 3</div>
-                    <div class="sub">sub idea 4</div>
-                    <div class="sub">sub idea 5</div>
-                    <div class="sub">sub idea 6</div>
-                    <div class="sub">sub idea 7</div>
-                    <div class="sub">sub idea 8</div>
-                    <div class="sub">sub idea 9</div>
-                    <div class="sub">sub idea 10</div>
-            </div>
-        </div>
-        <div class="component">
-            <div class="root">root idea 5</div>
-            <div class="overflow_container">
-                    <div class="sub">sub idea 1</div>
-                    <div class="sub">sub idea 2</div>
-                    <div class="sub">sub idea 3</div>
-                    <div class="sub">sub idea 4</div>
-                    <div class="sub">sub idea 5</div>
-                    <div class="sub">sub idea 6</div>
-                    <div class="sub">sub idea 7</div>
-                    <div class="sub">sub idea 8</div>
-                    <div class="sub">sub idea 9</div>
-                    <div class="sub">sub idea 10</div>
-            </div>
-        </div>
-        <div class="component">
-            <div class="root">root idea 6</div>
-            <div class="overflow_container">
-                    <div class="sub">sub idea 1</div>
-                    <div class="sub">sub idea 2</div>
-                    <div class="sub">sub idea 3</div>
-                    <div class="sub">sub idea 4</div>
-                    <div class="sub">sub idea 5</div>
-                    <div class="sub">sub idea 6</div>
-                    <div class="sub">sub idea 7</div>
-                    <div class="sub">sub idea 8</div>
-                    <div class="sub">sub idea 9</div>
-                    <div class="sub">sub idea 10</div>
-            </div>
+    <div id="scrolling-box">
+        <div id="component-container">
+            <!-- <div class="component">
+                <div class="root" id="root1">root idea 1</div>
+                <div class='overflow_container'>
+                        <div class="sub">sub idea 1</div>
+                        <div class="sub">sub idea 2</div>
+                        <div class="sub">sub idea 3</div>
+                        <div class="sub">sub idea 4</div>
+                </div>
+            </div> -->
         </div>
     </div>
-
+    <script src="./demo2.js"></script>
 </body>
 </html>

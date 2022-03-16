@@ -42,7 +42,17 @@ function zoomin(id){
     Object.keys(allData[num]).forEach(function(key){
         $("#block"+key).html(allData[num][key]);
     })
-    $("#root").text("<- Go Back")
+    $("#nav").empty();
+    $("#nav").append("<td class=nav_td id='root' onclick='zoomout()'><- Go Back</td>");
+    Object.keys(allData["0"]).forEach(function(key){
+        $("#nav").append("<td class=nav_td onclick='switchLevel("+(key)+")'>"+"root idea "+(key)+":"+allData["0"][key]+"</td>");
+    })
+    // for (var i=1; i<9; i++){
+    //     if ((i!=parseInt(num)) && (Object.keys(allData["0"]).indexOf(str(i))){
+    //         console.log(str(i));
+    //     }
+    // }
+
     level = num;
 }
 
@@ -53,7 +63,8 @@ function zoomout(){
     Object.keys(allData["0"]).forEach(function(key){
         $("#block"+key).html(allData["0"][key]);
     })
-    $("#root").text("");
+    $("#nav").empty();
+    // $("#root").text("");
     level = "root";
 }
 
@@ -65,11 +76,17 @@ function switchLevel(num){
         $("#block"+key).html(allData[num][key]);
     })
     if (num=="0"){
-        $("#root").text("");
+        // $("#root").text("");
+        $("#nav").empty();
         level = "root";
     }
     else{
-        $("#root").text("Root idea "+(num)+": "+allData["0"][num])
+        // $("#root").text("Root idea "+(num)+": "+allData["0"][num])
+        $("#nav").empty();
+        $("#nav").append("<td class=nav_td id='root' onclick='zoomout()'><- Go Back</td>");
+        Object.keys(allData["0"]).forEach(function(key){
+            $("#nav").append("<td class=nav_td onclick='switchLevel("+(key)+")'>"+"root idea "+(key)+":"+allData["0"][key]+"</td>");
+        })
         level = num;
     }
 }
