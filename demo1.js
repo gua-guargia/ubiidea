@@ -69,7 +69,8 @@ function switchLevel(num){
         level = "root";
     }
     else{
-        $("#root").text("Root idea "+(num)+": "+allData["0"][num])
+        $("#root").text("<- Go Back")
+        // $("#root").text("Root idea "+(num)+": "+allData["0"][num])
         level = num;
     }
 }
