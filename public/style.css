@@ -7,6 +7,17 @@ ul{
 p {
     color: #008800;
 }
+
+input {
+    color: #008800;
+    background-color: black;
+    border-color: black;
+    margin-left: 15px;
+}
+img{
+    margin-left: 15px;
+}
+
 /* The switch - the box around the slider */
 .switch {
     position: relative;

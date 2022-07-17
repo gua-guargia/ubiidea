@@ -61,6 +61,14 @@ app.post('/data', (req, res, next) => {
     .catch()
 })
 
+app.post('/image', async (req, res, next) => {
+    var kw = req.body['kw'];
+    console.log(kw);
+    url = await image_search(kw).catch();
+    console.log({image: url});
+    res.json({image: url});
+})
+
 
 
 

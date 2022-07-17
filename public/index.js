@@ -1,6 +1,16 @@
+const PREFIX_URL = "http://127.0.0.1:3000" //https://ubiidea-node.herokuapp.com
+
 $( document ).ready(function() {
     console.log("TEST LINES:\nif you have a lot of shoes, you can like scatter them around the floor and use them as a kind of obstacle course. You have to cross without touching any of the shoes. You can use it as a kind of habitat for certain pets,  like maybe you wanna keep a small lizard or small hamster, and you use a clean shoe to make it its home.")
     sessionStorage.setItem("checkbox", JSON.stringify("off"));
+
+    // when refresh the page, load current session storage
+    var cleanData, imgs;
+    if (sessionStorage.getItem('keywords') != null){
+        cleanData = JSON.parse(sessionStorage.getItem('keywords'));
+        imgs = JSON.parse(sessionStorage.getItem('images'));
+        display(cleanData, imgs)
+    }
 })
 
 // speech to text
@@ -34,7 +44,7 @@ function transData(params){
     var returnJSON;
     $.ajax({
         type:'POST',
-        url:'https://ubiidea-node.herokuapp.com/data',
+        url: PREFIX_URL + '/data',
         data: JSON.stringify(params),
         processData: false,
         contentType: 'application/json',
@@ -57,15 +67,8 @@ function transData(params){
         cleanData = cleanData.concat(returnJSON.response);
         imgs = imgs.concat(returnJSON.images);
 
-        // display keywords
-        $("#root-container").empty()
-        cleanData.forEach((element,index) => {
-            $("#root-container").append("<li>"+element+"</li>") // CHANGE IT TO INPUT TEXT AND UPDATE THEM
-            //add image if switch on
-            $("#root-container").append("<img src='"+imgs[index]+"' style='width:100px;'>")
-            if (JSON.parse(sessionStorage.getItem('checkbox')) == "on"){$("img").show();}
-            else{$("img").hide();}
-        })
+        // display keywords and images
+        display(cleanData, imgs)
 
         // save data
         sessionStorage.setItem("keywords", JSON.stringify(cleanData));
@@ -94,10 +97,50 @@ function getImage(){
     }
 }
 
-// select keyword and revise them
-function update(){
-
+// display
+function display(cleanData, imgs){
+    $("#root-container").empty()
+    cleanData.forEach((element,index) => {
+        //$("#root-container").append("<li>"+element+"</li>") // CHANGE IT TO INPUT TEXT AND UPDATE THEM
+        $("#root-container").append("<input type='text' onchange='update(this.id, this.value)' id='kw-"+ index +"-"+ element +"' name='" + element + "' value='" + element +"'></input><br/>")
+        //add image if switch on
+        $("#root-container").append("<img src='"+imgs[index]+"' id='img-"+index+"-"+element+"' style='width:150px;'><br/>")
+        if (JSON.parse(sessionStorage.getItem('checkbox')) == "on"){$("img").show();}
+        else{$("img").hide();}
+    })
 }
+
+// select keyword and revise selected text and corresponing image
+function update(id, val){
+    var image_url;
+    var old_val = id.split("-")[2];
+    var index = id.split("-")[1];
+    var keywords = JSON.parse(sessionStorage.getItem('keywords'));
+    var images = JSON.parse(sessionStorage.getItem('images'));
+    keywords[parseInt(index)] = val
+    sessionStorage.setItem("keywords", JSON.stringify(keywords));
+    $("#" + id).attr("id", "kw-"+index+"-"+val);
+    $("#img-" +index+"-"+old_val).attr("id", "img-"+index+"-"+val);
+
+    $.ajax({
+        type:'POST',
+        url: PREFIX_URL + '/image',
+        data: JSON.stringify({kw:val}),
+        processData: false,
+        contentType: 'application/json',
+        dataType: 'json'
+    })
+    .then(ret => image_url = ret)
+    .then(()=>{
+        console.log(image_url["image"]);
+        $("#img-" +index+"-"+val).attr("src", image_url["image"]);
+        //$("img-"+index+"-"+val).remove();
+        //$("#" + id).append("<img src='"+image_url["image"]+"' id='img-"+index+"-"+val+"' style='width:150px;'><br/>")
+        images[parseInt(index)] = image_url["image"]
+        sessionStorage.setItem("images", JSON.stringify(images));
+    })
+}
+
 
 // download as json
 function download() {
@@ -113,4 +156,5 @@ function download() {
     a.download = fileName;
     a.click();
 }
+
 
