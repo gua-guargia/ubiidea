@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<head>
+    <title>Ubiidea</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <link rel="stylesheet" href="public/style.css">
+</head>
+<body>
+    <button type="button" onclick="runSpeechRecognition()">Speech to Text</button> 
+    <button type="button" onclick="clearData()">Clear Data</button> 
+    <p>Show image: 
+        <label class="switch">
+            <input type="checkbox" onclick="getImage()">
+            <span class="slider round"></span>
+        </label>
+    </p>
+    <ul id="root-container"></ul>    
+    <script src="public/index.js"></script>
+</body>
