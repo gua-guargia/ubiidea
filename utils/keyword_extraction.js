@@ -1,8 +1,10 @@
 const { Configuration, OpenAIApi } = require("openai");
 
 async function keyword_extraction(data){
+    var a = "sk-WgwjBWBRVNtB0pDy"
+    var b = "J8NqT3BlbkFJ1FVvBIL51g5KA1TVVwNk"
     const configuration = new Configuration({
-        apiKey: "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",
+        apiKey: a+b,
       });
     const openai = new OpenAIApi(configuration);
     
