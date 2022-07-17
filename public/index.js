@@ -34,7 +34,7 @@ function transData(params){
     var returnJSON;
     $.ajax({
         type:'POST',
-        url:'http://127.0.0.1:3000/data',
+        url:'https://ubiidea-node.herokuapp.com/data',
         data: JSON.stringify(params),
         processData: false,
         contentType: 'application/json',
