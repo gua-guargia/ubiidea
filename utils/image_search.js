@@ -4,7 +4,7 @@ function image_search(element){
     return new Promise((resolve, reject) => {
         var url;
         gis(element, (error, results)=>{
-            url = results[Math.ceil(Math.random() * 5)]["url"];
+            url = results[Math.ceil(Math.random() * (results.length-1))]["url"];
             resolve(url);
         })
     })

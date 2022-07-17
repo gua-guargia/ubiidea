@@ -25,9 +25,10 @@ app.post('/data', (req, res, next) => {
     var data = req.body['val'].toLowerCase(); 
     console.log(data);
     
-    var imageURLs,cleanKeywords;
+    var cleanKeywords;
     
     keyword_extraction(data)
+    //pre-processing
     .then( result => {
         console.log("---------response---------");
         var keywords;
@@ -51,12 +52,13 @@ app.post('/data', (req, res, next) => {
         var imageURLs = [];
         var url;
         for (var i=0; i<cleanKeywords.length; i++){
-            url = await image_search(cleanKeywords[i])
+            url = await image_search(cleanKeywords[i]).catch()
             imageURLs.push(url)
         }
         console.log({response: cleanKeywords, images: imageURLs});
         res.json({response: cleanKeywords, images: imageURLs});
     })
+    .catch()
 })
 
 

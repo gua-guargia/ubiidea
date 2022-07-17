@@ -40,11 +40,12 @@ function transData(params){
         contentType: 'application/json',
         dataType: 'json'
     })
+    //load data
     .then( ret => returnJSON = ret)
     .then( () => {
         console.log(returnJSON);
         var cleanData, imgs; 
-        //load data
+        
         if (sessionStorage.getItem('keywords') == null){
             cleanData = [];
             imgs = [];
@@ -59,7 +60,7 @@ function transData(params){
         // display keywords
         $("#root-container").empty()
         cleanData.forEach((element,index) => {
-            $("#root-container").append("<li>"+element+"</li>")
+            $("#root-container").append("<li>"+element+"</li>") // CHANGE IT TO INPUT TEXT AND UPDATE THEM
             //add image if switch on
             $("#root-container").append("<img src='"+imgs[index]+"' style='width:100px;'>")
             if (JSON.parse(sessionStorage.getItem('checkbox')) == "on"){$("img").show();}
@@ -93,6 +94,23 @@ function getImage(){
     }
 }
 
-function topicalView(){
+// select keyword and revise them
+function update(){
 
 }
+
+// download as json
+function download() {
+    const keywords = JSON.parse(sessionStorage.getItem('keywords'));
+    const images = JSON.parse(sessionStorage.getItem('images'));
+    const content = JSON.stringify({"keywords": keywords, "image_url":images}) 
+    const fileName = "ubiidea-data.json" 
+    const contentType = "text/plain"
+
+    const a = document.createElement("a");
+    const file = new Blob([content], { type: contentType });
+    a.href = URL.createObjectURL(file);
+    a.download = fileName;
+    a.click();
+}
+
