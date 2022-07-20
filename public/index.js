@@ -135,6 +135,17 @@ function update(id, val){
     var index = id.split("-")[1];
     var keywords = JSON.parse(sessionStorage.getItem('keywords'));
     var images = JSON.parse(sessionStorage.getItem('images'));
+
+    if (val==""){
+        $("#" + id).remove()
+        $("#img-" +index+"-"+old_val).remove()
+        keywords.splice(parseInt(index), 1)
+        images.splice(parseInt(index), 1)
+        sessionStorage.setItem("keywords", JSON.stringify(keywords));
+        sessionStorage.setItem("images", JSON.stringify(images));
+        return
+    }
+
     keywords[parseInt(index)] = val
     sessionStorage.setItem("keywords", JSON.stringify(keywords));
     $("#" + id).attr("id", "kw-"+index+"-"+val);
