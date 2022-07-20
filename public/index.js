@@ -1,5 +1,5 @@
 const PREFIX_URL = "https://ubiidea-node.herokuapp.com"
-//const PREFIX_URL = "http://127.0.0.1:3000" 
+// const PREFIX_URL = "http://127.0.0.1:3000" 
 
 $( document ).ready(function() {
     console.log("TEST LINES:\nif you have a lot of shoes, you can like scatter them around the floor and use them as a kind of obstacle course. You have to cross without touching any of the shoes. You can use it as a kind of habitat for certain pets,  like maybe you wanna keep a small lizard or small hamster, and you use a clean shoe to make it its home.")
@@ -21,18 +21,30 @@ function runSpeechRecognition() {
 
     recognition.onstart = function() {
         console.log("listening, please speak...");
+        $("#state").text("STATUS:listening, please speak...")
     };
     
     recognition.onspeechend = function() {
+        $("#state").text("STATUS:stopped listening, hope you are done...")
         console.log("stopped listening, hope you are done...");
         recognition.stop();
     }
     
     recognition.onresult = function(event) {
+        $("#state").text("STATUS: transcripting...")
         var transcript = event.results[0][0].transcript;
         var confidence = event.results[0][0].confidence;
         console.log(transcript);
         console.log(confidence);
+
+        //remove the prompt
+        prompt = JSON.parse(sessionStorage.getItem('prompt'));
+        console.log(prompt)
+        transcript = transcript.replace(prompt, "");
+
+        console.log("remove prompt")
+        console.log(transcript);
+
         var params = {val:transcript};
         transData(params);
     };
@@ -42,6 +54,7 @@ function runSpeechRecognition() {
 
 // data transmission between frontend and backend
 function transData(params){
+    $("#state").text("STATUS: extracting keywords...")
     var returnJSON;
     $.ajax({
         type:'POST',
@@ -52,11 +65,13 @@ function transData(params){
         dataType: 'json'
     })
     //load data
-    .then( ret => returnJSON = ret)
+    .then( ret => {returnJSON = ret})
     .then( () => {
         console.log(returnJSON);
         var cleanData, imgs; 
         
+        $("#state").text("STATUS: displaying keywords...")
+
         if (sessionStorage.getItem('keywords') == null){
             cleanData = [];
             imgs = [];
@@ -76,6 +91,8 @@ function transData(params){
         sessionStorage.setItem("images", JSON.stringify(imgs));
         console.log(JSON.parse(sessionStorage.getItem('keywords')));
         console.log(JSON.parse(sessionStorage.getItem('images')));
+
+        $("#state").text("STATUS: waiting for your speech")
     })
 }
 
@@ -103,7 +120,7 @@ function display(cleanData, imgs){
     $("#root-container").empty()
     cleanData.forEach((element,index) => {
         //$("#root-container").append("<li>"+element+"</li>") // CHANGE IT TO INPUT TEXT AND UPDATE THEM
-        $("#root-container").append("<input type='text' onchange='update(this.id, this.value)' id='kw-"+ index +"-"+ element +"' name='" + element + "' value='" + element +"'></input><br/>")
+        $("#root-container").append("<input type='text' onchange='update(this.id, this.value)' class='kw-input' id='kw-"+ index +"-"+ element +"' name='" + element + "' value='" + element +"'></input><br/>")
         //add image if switch on
         $("#root-container").append("<img src='"+imgs[index]+"' id='img-"+index+"-"+element+"' style='width:150px;'><br/>")
         if (JSON.parse(sessionStorage.getItem('checkbox')) == "on"){$("img").show();}
@@ -156,6 +173,11 @@ function download() {
     a.href = URL.createObjectURL(file);
     a.download = fileName;
     a.click();
+}
+
+// remove prompt from keyword list
+function removePrompt(){
+    sessionStorage.setItem("prompt", JSON.stringify($("#input-prompt").val()));
 }
 
 
