@@ -28,7 +28,7 @@ function runSpeechRecognition() {
     recognition.maxAlternatives = 1;
 
     if ($( "#btn-speech-to-text" ).text() == "End Recording"){
-        $("#state").text("STATUS:stopped listening, hope you are done...");
+        $("#state").text("STATUS: stopped listening, hope you are done...");
         recognition.stop();
 
         $( "#btn-speech-to-text" ).text("Start Recording")
@@ -42,7 +42,7 @@ function runSpeechRecognition() {
     }
     else{
         recognition.onstart = function() {
-            $("#state").text("STATUS:listening, please speak...")
+            $("#state").text("STATUS: listening, please speak...")
         };
 
         recognition.onresult = function(event) {
@@ -199,7 +199,15 @@ function download() {
 
 // remove prompt from keyword list
 function removePrompt(){
-    sessionStorage.setItem("prompt", JSON.stringify($("#input-prompt").val()));
+    var value = $("#input-prompt").val();
+    var values = value.split(',');
+    console.log(values);
+    sessionStorage.setItem("prompt", JSON.stringify(values));
+
+
+    /* var value = $("#input-prompt").val();
+    var test = JSON.parse(sessionStorage.getItem("prompt"));
+    alert(test); */
 }
 
 
