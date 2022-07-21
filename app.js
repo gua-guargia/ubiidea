@@ -57,6 +57,7 @@ app.post('/data', (req, res, next) => {
         console.log({response: cleanKeywords, images: imageURLs});
         res.json({response: cleanKeywords, images: imageURLs});
     })
+    .catch()
 })
 
 

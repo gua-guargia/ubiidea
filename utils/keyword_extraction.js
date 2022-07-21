@@ -2,7 +2,7 @@ const { Configuration, OpenAIApi } = require("openai");
 
 async function keyword_extraction(data){
     const configuration = new Configuration({
-        apiKey: "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",
+        apiKey: "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",
       });
     const openai = new OpenAIApi(configuration);
     
