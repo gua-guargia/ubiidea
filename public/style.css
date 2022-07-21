@@ -7,6 +7,30 @@ ul{
 p {
     color: #008800;
 }
+
+.kw-input {
+    color: #008800;
+    background-color: black;
+    border-color: black;
+    margin-left: 15px;
+}
+img{
+    margin-left: 15px;
+}
+
+button {
+    background-color: #555; /* Green */
+    border: none;
+    color: white;
+    padding: 4px 8px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 14px;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+
 /* The switch - the box around the slider */
 .switch {
     position: relative;

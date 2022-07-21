@@ -5,14 +5,20 @@
     <link rel="stylesheet" href="public/style.css">
 </head>
 <body>
-    <button type="button" onclick="runSpeechRecognition()">Speech to Text</button> 
+    <input type="text" id="input-prompt">
+    <button type="button" onclick="removePrompt()">Set Prompt</button> 
+    <br/><br/>
+
+    <button id="btn-speech-to-text" type="button" onclick="runSpeechRecognition()">Start Recording</button> 
     <button type="button" onclick="clearData()">Clear Data</button> 
+    <button type="button" onclick="download()">Download Data</button> 
+    <p id="state">STATUS: waiting for your speech</p>
     <p>Show image: 
         <label class="switch">
             <input type="checkbox" onclick="getImage()">
             <span class="slider round"></span>
         </label>
     </p>
-    <ul id="root-container"></ul>    
+    <div id="root-container"></div>    
     <script src="public/index.js"></script>
 </body>
