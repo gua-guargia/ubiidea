@@ -78,8 +78,21 @@ function transData(params){
     .then( () => {
         console.log(returnJSON);
         var cleanData, imgs; 
+        var maxKeyword;
         
         $("#state").text("STATUS: displaying keywords...")
+
+        // get max keywords number
+        if (sessionStorage.getItem('maxKeyword') == null){
+            // default set to 3
+            maxKeyword = 3;
+        }
+        else {
+            maxKeyword = JSON.parse(sessionStorage.getItem('maxKeyword'));
+        }
+        console.log(maxKeyword);
+        console.log(maxKeyword.type);
+
 
         if (sessionStorage.getItem('keywords') == null){
             cleanData = [];
@@ -89,8 +102,22 @@ function transData(params){
             cleanData = JSON.parse(sessionStorage.getItem('keywords'));
             imgs = JSON.parse(sessionStorage.getItem('images'));
         }
-        cleanData = cleanData.concat(returnJSON.response);
-        imgs = imgs.concat(returnJSON.images);
+
+        let newArrData = [];
+        let newArrImgs = [];
+        for(let x = 0; x < maxKeyword; x++) {
+            if(returnJSON.response[x] != null && returnJSON.images[x] != null) {
+                newArrData.push(returnJSON.response[x]);
+                newArrImgs.push(returnJSON.images[x]);
+            }
+            else {
+                break;
+            }
+            
+        }
+        
+        cleanData = cleanData.concat(newArrData);
+        imgs = imgs.concat(newArrImgs);
 
         // display keywords and images
         display(cleanData, imgs)
@@ -109,6 +136,8 @@ function transData(params){
 function clearData(){
     sessionStorage.setItem("keywords", JSON.stringify([]));
     sessionStorage.setItem("images", JSON.stringify([]));
+    sessionStorage.setItem("prompt", JSON.stringify([]));
+    sessionStorage.setItem("maxKeyword", JSON.stringify([]));
     console.log(sessionStorage);
     $("#root-container").empty();
 }
@@ -199,15 +228,17 @@ function download() {
 
 // remove prompt from keyword list
 function removePrompt(){
-    var value = $("#input-prompt").val();
-    var values = value.split(',');
-    console.log(values);
-    sessionStorage.setItem("prompt", JSON.stringify(values));
+    var prompt = $("#input-prompt").val();
+    var prompts = prompt.split(',');
+    console.log(prompts);
+    sessionStorage.setItem("prompt", JSON.stringify(prompts));
+}
 
-
-    /* var value = $("#input-prompt").val();
-    var test = JSON.parse(sessionStorage.getItem("prompt"));
-    alert(test); */
+// set maximum keywords for each ideas
+function setMaxKeyword() {
+    var maxKeyword = $("#input-max-keyword").val();
+    console.log(maxKeyword);
+    sessionStorage.setItem("maxKeyword", JSON.stringify(maxKeyword));
 }
 
 
