@@ -1,5 +1,5 @@
-// const PREFIX_URL = "https://ubiidea-node.herokuapp.com"
-const PREFIX_URL = "http://127.0.0.1:3000" 
+const PREFIX_URL = "https://ubiidea-node.herokuapp.com"
+// const PREFIX_URL = "http://127.0.0.1:3000" 
 
 $( document ).ready(function() {
     console.log("TEST LINES:\nif you have a lot of shoes, you can like scatter them around the floor and use them as a kind of obstacle course. You have to cross without touching any of the shoes. You can use it as a kind of habitat for certain pets,  like maybe you wanna keep a small lizard or small hamster, and you use a clean shoe to make it its home.")
