@@ -1,5 +1,5 @@
-const PREFIX_URL = "https://ubiidea-node.herokuapp.com"
-// const PREFIX_URL = "http://127.0.0.1:3000" 
+// const PREFIX_URL = "https://ubiidea-node.herokuapp.com"
+const PREFIX_URL = "http://127.0.0.1:3000" 
 
 $( document ).ready(function() {
     console.log("TEST LINES:\nif you have a lot of shoes, you can like scatter them around the floor and use them as a kind of obstacle course. You have to cross without touching any of the shoes. You can use it as a kind of habitat for certain pets,  like maybe you wanna keep a small lizard or small hamster, and you use a clean shoe to make it its home.")
@@ -14,42 +14,51 @@ $( document ).ready(function() {
     }
 })
 
+var transcript = "";
+
 // speech to text
 function runSpeechRecognition() {
+
     var SpeechRecognition = SpeechRecognition || webkitSpeechRecognition;
     var recognition = new SpeechRecognition();
 
-    recognition.onstart = function() {
-        console.log("listening, please speak...");
-        $("#state").text("STATUS:listening, please speak...")
-    };
-    
-    recognition.onspeechend = function() {
-        $("#state").text("STATUS:stopped listening, hope you are done...")
-        console.log("stopped listening, hope you are done...");
+    recognition.continuous = true;
+    recognition.lang = 'en-US';
+    recognition.interimResults = false;
+    recognition.maxAlternatives = 1;
+
+    if ($( "#btn-speech-to-text" ).text() == "End Recording"){
+        $("#state").text("STATUS:stopped listening, hope you are done...");
         recognition.stop();
-    }
-    
-    recognition.onresult = function(event) {
-        $("#state").text("STATUS: transcripting...")
-        var transcript = event.results[0][0].transcript;
-        var confidence = event.results[0][0].confidence;
-        console.log(transcript);
-        console.log(confidence);
 
-        //remove the prompt
-        prompt = JSON.parse(sessionStorage.getItem('prompt'));
-        console.log(prompt)
-        transcript = transcript.replace(prompt, "");
-
-        console.log("remove prompt")
-        console.log(transcript);
-
+        $( "#btn-speech-to-text" ).text("Start Recording")
+        $('#btn-speech-to-text').css("background-color", "#555")
+        
         var params = {val:transcript};
+        console.log(params);
         transData(params);
-    };
-    
-    recognition.start();
+
+        transcript = "";
+    }
+    else{
+        recognition.onstart = function() {
+            $("#state").text("STATUS:listening, please speak...")
+        };
+
+        recognition.onresult = function(event) {
+            // $("#state").text("STATUS: transcripting...")
+            // console.log(event.results);
+            transcript = "";
+            for (var i=0; i<event.results.length; i++){
+                transcript += event.results[i][0]['transcript'];
+            }
+            console.log(transcript);
+        };
+        
+        recognition.start();
+        $( "#btn-speech-to-text" ).text("End Recording");
+        $('#btn-speech-to-text').css("background-color", "#f44336")
+    }
 }
 
 // data transmission between frontend and backend
@@ -119,12 +128,14 @@ function getImage(){
 function display(cleanData, imgs){
     $("#root-container").empty()
     cleanData.forEach((element,index) => {
-        //$("#root-container").append("<li>"+element+"</li>") // CHANGE IT TO INPUT TEXT AND UPDATE THEM
-        $("#root-container").append("<input type='text' onchange='update(this.id, this.value)' class='kw-input' id='kw-"+ index +"-"+ element +"' name='" + element + "' value='" + element +"'></input><br/>")
-        //add image if switch on
-        $("#root-container").append("<img src='"+imgs[index]+"' id='img-"+index+"-"+element+"' style='width:150px;'><br/>")
-        if (JSON.parse(sessionStorage.getItem('checkbox')) == "on"){$("img").show();}
-        else{$("img").hide();}
+        if (element != JSON.parse(sessionStorage.getItem('prompt'))){
+            //$("#root-container").append("<li>"+element+"</li>") // CHANGE IT TO INPUT TEXT AND UPDATE THEM
+            $("#root-container").append("<input type='text' onchange='update(this.id, this.value)' class='kw-input' id='kw-"+ index +"-"+ element +"' name='" + element + "' value='" + element +"'></input><br/>")
+            //add image if switch on
+            $("#root-container").append("<img src='"+imgs[index]+"' id='img-"+index+"-"+element+"' style='width:150px;'><br/>")
+            if (JSON.parse(sessionStorage.getItem('checkbox')) == "on"){$("img").show();}
+            else{$("img").hide();}
+        }
     })
 }
 
