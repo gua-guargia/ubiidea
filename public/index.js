@@ -34,13 +34,23 @@ function runSpeechRecognition() {
         $( "#btn-speech-to-text" ).text("Start Recording")
         $('#btn-speech-to-text').css("background-color", "#555")
         
-        var params = {val:transcript};
-        console.log(params);
-        transData(params);
 
-        transcript = "";
+        // Temporary solution, couldnt resolve the if else problem with button text
+        console.log(transcript);
+        if (transcript != "") {
+            var params = {val:transcript};
+            console.log(params);
+            transData(params);
+            transcript = "";
+        }
+        else {
+            $("#state").text("STATUS: speech detection failed, please record your speech again");
+        }
+        
     }
-    else{
+    else {
+        console.log($( "#btn-speech-to-text" ).text());
+
         recognition.onstart = function() {
             $("#state").text("STATUS: listening, please speak...")
         };
@@ -56,8 +66,11 @@ function runSpeechRecognition() {
         };
         
         recognition.start();
+
         $( "#btn-speech-to-text" ).text("End Recording");
-        $('#btn-speech-to-text').css("background-color", "#f44336")
+        $('#btn-speech-to-text').css("background-color", "#f44336");
+
+        console.log($( "#btn-speech-to-text" ).text());
     }
 }
 
@@ -83,16 +96,12 @@ function transData(params){
         $("#state").text("STATUS: displaying keywords...")
 
         // get max keywords number
-        if (sessionStorage.getItem('maxKeyword') == null){
-            // default set to 3
+        if (sessionStorage.getItem('maxKeyword') == JSON.stringify([]) || sessionStorage.getItem('maxKeyword') == null) {
             maxKeyword = 3;
         }
         else {
             maxKeyword = JSON.parse(sessionStorage.getItem('maxKeyword'));
         }
-        console.log(maxKeyword);
-        console.log(maxKeyword.type);
-
 
         if (sessionStorage.getItem('keywords') == null){
             cleanData = [];
