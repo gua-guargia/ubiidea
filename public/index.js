@@ -129,7 +129,7 @@ function transData(params){
         imgs = imgs.concat(newArrImgs);
 
         // display keywords and images
-        display(cleanData, imgs)
+        display(newArrData, newArrImgs)
 
         // save data
         sessionStorage.setItem("keywords", JSON.stringify(cleanData));
@@ -163,18 +163,25 @@ function getImage(){
 }
 
 // display
-function display(cleanData, imgs){
-    $("#root-container").empty()
+async function display(cleanData, imgs){
+    // $("#root-container").empty()
+    var prompt = JSON.parse(sessionStorage.getItem('prompt'));
     cleanData.forEach((element,index) => {
-        if (element != JSON.parse(sessionStorage.getItem('prompt'))){
+        if (!prompt.includes(element)) {
             //$("#root-container").append("<li>"+element+"</li>") // CHANGE IT TO INPUT TEXT AND UPDATE THEM
-            $("#root-container").append("<input type='text' onchange='update(this.id, this.value)' class='kw-input' id='kw-"+ index +"-"+ element +"' name='" + element + "' value='" + element +"'></input><br/>")
-            //add image if switch on
-            $("#root-container").append("<img src='"+imgs[index]+"' id='img-"+index+"-"+element+"' style='width:150px;'><br/>")
-            if (JSON.parse(sessionStorage.getItem('checkbox')) == "on"){$("img").show();}
-            else{$("img").hide();}
+            $("#root-container").append("<input type='text' onchange='update(this.id, this.value)' style='margin-top:10px; width:150px;' class='kw-input' id='kw-"+ index +"-"+ element +"' name='" + element + "' value='" + element +"'></input>")
         }
     })
+    $("#root-container").append("<br/>");
+    cleanData.forEach((element,index) => {
+        if (!prompt.includes(element)) {
+            //add image if switch on
+            $("#root-container").append("<img src='"+imgs[index]+"' id='img-"+index+"-"+element+"' style='width:150px;'>")
+             if (JSON.parse(sessionStorage.getItem('checkbox')) == "on"){$("img").show();}
+             else{$("img").hide();}
+        }
+    })
+    $("#root-container").append("<br/>");
 }
 
 // select keyword and revise selected text and corresponing image

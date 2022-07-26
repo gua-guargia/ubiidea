@@ -11,16 +11,16 @@
     <button type="button" onclick="setMaxKeyword()">Set Maximum Keywords</button> 
     <br/><br/>
 
-    <button id="btn-speech-to-text" type="button" onclick="runSpeechRecognition()">Start Recording</button> 
+    <button id="btn-speech-to-text" type="button" onclick="runSpeechRecognition()" style="margin-left:50px; margin-top:20px">Start Recording</button> 
     <button type="button" onclick="clearData()">Clear Data</button> 
     <button type="button" onclick="download()">Download Data</button> 
-    <p id="state">STATUS: waiting for your speech</p>
-    <p>Show image: 
+    <p id="state" style="padding-left:50px">STATUS: waiting for your speech</p>
+    <p style="padding-left:50px">Show image: 
         <label class="switch">
             <input type="checkbox" onclick="getImage()">
             <span class="slider round"></span>
         </label>
     </p>
-    <div id="root-container"></div>    
+    <div id="root-container" style="padding-left:60px"></div>
     <script src="public/index.js"></script>
 </body>
