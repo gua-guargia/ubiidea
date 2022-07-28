@@ -16,11 +16,17 @@
     <button type="button" onclick="download()">Download Data</button> 
     <p id="state" style="padding-left:50px">STATUS: waiting for your speech</p>
     <p style="padding-left:50px">Show image: 
-        <label class="switch">
+        <label class="switch" style="margin-right:20px">
             <input type="checkbox" onclick="getImage()">
+            <span class="slider round"></span>
+        </label>
+    Script: 
+        <label class="switch">
+            <input type="checkbox" onclick="getScript()">
             <span class="slider round"></span>
         </label>
     </p>
     <div id="root-container" style="padding-left:60px"></div>
+    <div id="script-container" style="padding-left:60px"></div>
     <script src="public/index.js"></script>
 </body>

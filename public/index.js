@@ -4,14 +4,19 @@ const PREFIX_URL = "https://ubiidea-node.herokuapp.com"
 $( document ).ready(function() {
     console.log("TEST LINES:\nif you have a lot of shoes, you can like scatter them around the floor and use them as a kind of obstacle course. You have to cross without touching any of the shoes. You can use it as a kind of habitat for certain pets,  like maybe you wanna keep a small lizard or small hamster, and you use a clean shoe to make it its home.")
     sessionStorage.setItem("checkbox", JSON.stringify("off"));
+    sessionStorage.setItem("scriptCheckbox", JSON.stringify("off"));
 
     // when refresh the page, load current session storage
-    var cleanData, imgs;
-    if (sessionStorage.getItem('keywords') != null){
+    var cleanData, imgs, transcript;
+    if (sessionStorage.getItem('keywords') != null && sessionStorage.getItem('keywords') != JSON.stringify([]) ){
         cleanData = JSON.parse(sessionStorage.getItem('keywords'));
         imgs = JSON.parse(sessionStorage.getItem('images'));
-        display(cleanData, imgs)
+        transcript = JSON.parse(sessionStorage.getItem('transcript'));
+        displayKeyword(cleanData, imgs);
+        displayScript(transcript, cleanData);
+        // highlightKeyword();
     }
+    
 })
 
 var transcript = "";
@@ -90,12 +95,12 @@ function transData(params){
     .then( ret => {returnJSON = ret})
     .then( () => {
         console.log(returnJSON);
-        var cleanData, imgs; 
+        var cleanData, imgs, transcript; 
         var maxKeyword;
         
         $("#state").text("STATUS: displaying keywords...")
 
-        // get max keywords number
+        // get max keywords number in memory
         if (sessionStorage.getItem('maxKeyword') == JSON.stringify([]) || sessionStorage.getItem('maxKeyword') == null) {
             maxKeyword = 3;
         }
@@ -103,6 +108,7 @@ function transData(params){
             maxKeyword = JSON.parse(sessionStorage.getItem('maxKeyword'));
         }
 
+        // get keywords in memory
         if (sessionStorage.getItem('keywords') == null){
             cleanData = [];
             imgs = [];
@@ -112,8 +118,18 @@ function transData(params){
             imgs = JSON.parse(sessionStorage.getItem('images'));
         }
 
+        // get transcript in memory
+        if (sessionStorage.getItem('transcript') == null){
+            transcript = [];
+        }
+        else {
+            transcript = JSON.parse(sessionStorage.getItem('transcript'));
+        }
+
         let newArrData = [];
         let newArrImgs = [];
+        let newArrTranscript = [];
+
         for(let x = 0; x < maxKeyword; x++) {
             if(returnJSON.response[x] != null && returnJSON.images[x] != null) {
                 newArrData.push(returnJSON.response[x]);
@@ -124,18 +140,24 @@ function transData(params){
             }
             
         }
+
+        newArrTranscript.push(params.val);
         
         cleanData = cleanData.concat(newArrData);
         imgs = imgs.concat(newArrImgs);
+        transcript = transcript.concat(newArrTranscript);
 
-        // display keywords and images
-        display(newArrData, newArrImgs)
+        // display keywords, images and transcript
+        displayKeyword(newArrData, newArrImgs);
+        displayScript(newArrTranscript, newArrData);
 
         // save data
         sessionStorage.setItem("keywords", JSON.stringify(cleanData));
         sessionStorage.setItem("images", JSON.stringify(imgs));
+        sessionStorage.setItem("transcript", JSON.stringify(transcript));
         console.log(JSON.parse(sessionStorage.getItem('keywords')));
         console.log(JSON.parse(sessionStorage.getItem('images')));
+        console.log(JSON.parse(sessionStorage.getItem('transcript')));
 
         $("#state").text("STATUS: waiting for your speech")
     })
@@ -147,8 +169,12 @@ function clearData(){
     sessionStorage.setItem("images", JSON.stringify([]));
     sessionStorage.setItem("prompt", JSON.stringify([]));
     sessionStorage.setItem("maxKeyword", JSON.stringify([]));
+    sessionStorage.setItem("transcript", JSON.stringify([]));
+    sessionStorage.setItem("scriptCheckbox", JSON.stringify("off"));
+    getScript();
     console.log(sessionStorage);
     $("#root-container").empty();
+    $("#script-container").empty();
 }
 
 function getImage(){
@@ -162,27 +188,76 @@ function getImage(){
     }
 }
 
-// display
-async function display(cleanData, imgs){
+// keyword display
+async function displayKeyword(cleanData, imgs){
     // $("#root-container").empty()
     var prompt = JSON.parse(sessionStorage.getItem('prompt'));
     cleanData.forEach((element,index) => {
         if (!prompt.includes(element)) {
             //$("#root-container").append("<li>"+element+"</li>") // CHANGE IT TO INPUT TEXT AND UPDATE THEM
-            $("#root-container").append("<input type='text' onchange='update(this.id, this.value)' style='margin-top:10px; width:150px;' class='kw-input' id='kw-"+ index +"-"+ element +"' name='" + element + "' value='" + element +"'></input>")
+            $("#root-container").append("<input type='text' onchange='update(this.id, this.value)' style='margin-top:10px; width:100px;' class='kw-input' id='kw-"+ index +"-"+ element +"' name='" + element + "' value='" + element +"'></input>")
         }
     })
     $("#root-container").append("<br/>");
     cleanData.forEach((element,index) => {
         if (!prompt.includes(element)) {
             //add image if switch on
-            $("#root-container").append("<img src='"+imgs[index]+"' id='img-"+index+"-"+element+"' style='width:150px;'>")
+            $("#root-container").append("<img src='"+imgs[index]+"' id='img-"+index+"-"+element+"' style='width:100px; height: 100px'>")
              if (JSON.parse(sessionStorage.getItem('checkbox')) == "on"){$("img").show();}
              else{$("img").hide();}
         }
     })
     $("#root-container").append("<br/>");
 }
+
+// script display
+async function displayScript(transcript, cleanData) {
+    console.log("script display");
+    var prompt = JSON.parse(sessionStorage.getItem('prompt'));
+    var script;
+    transcript.forEach((data,i) => {
+        script = data;
+        var words = script.split( /\s+/ );
+        var text = words.join( "</span> <span>" );
+        script = "<span>" + text + "</span>";
+
+        // script.html( "<span>" + text + "</span>" );
+        cleanData.forEach((element,index) => {
+            if (!prompt.includes(element)) {
+                //add script
+                //var keywords = script.split( /\s+/ );
+                //keywords.forEach((key) => {
+                var keywordWarper = wrapKeywordWithoutMark(element);
+                script = script.replace(new RegExp(keywordWarper, 'ig'), wrapKeywordWithMark(element));
+                //})
+            }
+        })
+    })
+
+    $("#script-container").append("<p style='padding-top:15px; padding-left:15px' class='drag'>"+script+"</p>");
+    $("#script-container").append("<br/>");
+    highlightKeyword();
+    if (JSON.parse(sessionStorage.getItem('scriptCheckbox')) == "off"){
+        $("#root-container").show();
+        $("#script-container").hide();
+    }
+    else {
+        $("#root-container").hide();
+        $("#script-container").show();
+    }
+}
+
+// wrap Keyword With HTML
+function wrapKeywordWithMark(keyword) {
+    return `<span class='mark'>${keyword}</span>`
+}
+
+function wrapKeywordWithoutMark(keyword) {
+    return `<span>${keyword}</span>`
+}
+
+
+
 
 // select keyword and revise selected text and corresponing image
 function update(id, val){
@@ -257,4 +332,31 @@ function setMaxKeyword() {
     sessionStorage.setItem("maxKeyword", JSON.stringify(maxKeyword));
 }
 
+// script switch
+function getScript() {
+    if (JSON.parse(sessionStorage.getItem('scriptCheckbox')) == "off"){
+        sessionStorage.setItem("scriptCheckbox", JSON.stringify("on")); // turn to ON
+        $("#root-container").hide();
+        $("#script-container").show();
+        highlightKeyword();
+    }
+    else {
+        sessionStorage.setItem("scriptCheckbox", JSON.stringify("off")); // turn to OFF
+        $("#root-container").show();
+        $("#script-container").hide();
+    }
 
+}
+
+
+// highlight the word on click in a sentence
+function highlightKeyword() {
+    $("span").on( "click", function() {
+        if ($( this ).is(".mark")){
+            $( this ).removeClass("mark");
+        }
+        else {
+            $( this ).addClass("mark");
+        }
+    });
+}

@@ -5,7 +5,13 @@ ul{
     color: #00FF00;
 }
 p {
+    
     color: #00FF00;
+    font-size: 20px;
+}
+
+span {
+    font-size: 20px;
 }
 
 .kw-input {
@@ -13,6 +19,7 @@ p {
     background-color: black;
     border-color: black;
     margin-left: 15px;
+    font-size: 20px;
 }
 img{
     margin-left: 15px;
@@ -26,10 +33,16 @@ button {
     text-align: center;
     text-decoration: none;
     display: inline-block;
-    font-size: 14px;
+    font-size: 20px;
     border-radius: 4px;
     cursor: pointer;
   }
+
+
+.mark {
+    background-color: #00FF00;
+    color: #000000;
+}
 
 /* The switch - the box around the slider */
 .switch {
