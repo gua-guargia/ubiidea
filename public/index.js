@@ -5,6 +5,8 @@ $( document ).ready(function() {
     console.log("TEST LINES:\nif you have a lot of shoes, you can like scatter them around the floor and use them as a kind of obstacle course. You have to cross without touching any of the shoes. You can use it as a kind of habitat for certain pets,  like maybe you wanna keep a small lizard or small hamster, and you use a clean shoe to make it its home.")
     sessionStorage.setItem("checkbox", JSON.stringify("off"));
     sessionStorage.setItem("scriptCheckbox", JSON.stringify("off"));
+    sessionStorage.setItem("hint", JSON.stringify(["flower pot", "canvas", "pillow", "door stopper", ]));
+    
 
     // when refresh the page, load current session storage
     var cleanData, imgs, transcript;
@@ -20,6 +22,7 @@ $( document ).ready(function() {
 })
 
 var transcript = "";
+var i;
 
 // speech to text
 function runSpeechRecognition() {
@@ -171,7 +174,10 @@ function clearData(){
     sessionStorage.setItem("maxKeyword", JSON.stringify([]));
     sessionStorage.setItem("transcript", JSON.stringify([]));
     sessionStorage.setItem("scriptCheckbox", JSON.stringify("off"));
+    sessionStorage.setItem("hint", JSON.stringify(["flower pot", "canvas", "pillow", "door stopper"]));
+    $("#hint").text("hint");
     getScript();
+    i = 0;
     console.log(sessionStorage);
     $("#root-container").empty();
     $("#script-container").empty();
@@ -359,4 +365,15 @@ function highlightKeyword() {
             $( this ).addClass("mark");
         }
     });
+}
+
+
+// give hint
+function giveHint() {
+    var hint = JSON.parse(sessionStorage.getItem('hint'));
+    $("#hint").text(hint[i]);
+    i++;
+    if(i >= hint.length) {
+        i = 0;
+    }
 }
